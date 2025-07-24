@@ -241,7 +241,7 @@ def plot_metadata_heatmap(udon_clusters, udon_metadata, metadata_col, path_to_sa
                                 cbar=True,
                                 cbar_kws={"shrink": 0.5},
                                 ax=ax2)
-        ax2.collections[0].colorbar.set_label("Z-Score Normalized Expression")
+        ax2.collections[0].colorbar.set_label("Binary Assignment")
         ax2.set_yticks(label_to_position2.values)
         ax2.set_yticklabels(label_to_position2.index.values, ha="right")
         ax2.yaxis.tick_left()

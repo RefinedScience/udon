@@ -100,6 +100,7 @@ def calculate_pseudobulks(adata, pseudobulk_groups, clusters='cell_type', donors
 
     # Filter for the cell types and donors for which to compute the pseudobulks
     adata = adata[adata.obs[clusters].isin(pseudobulk_groups[clusters])]
+    adata = adata[adata.obs[donors].isin(pseudobulk_groups[donors])]
 
     # Extract the gene expression matrix directly from adata
     gex_mat = adata.to_df()
@@ -141,6 +142,12 @@ def calculate_pseudobulks(adata, pseudobulk_groups, clusters='cell_type', donors
     # Convert the dictionary to a DataFrame
     pseudobulk_matrix = pd.DataFrame(pseudobulk_dict)
 
+    ######## this is where I had corrected for the QC step which was not taking place #########
+    if donor_specificity == 'donor-specific':
+        # filter for the cell type and donor combinations that are present in the pseudobulk_groups
+        combination_vector = pseudobulk_groups[clusters].astype(str) + '__' + pseudobulk_groups[donors].astype(str)
+        pseudobulk_matrix = pseudobulk_matrix.loc[:, pseudobulk_matrix.columns.isin(combination_vector)]
+        
     return pseudobulk_matrix
 
 def calculate_folds(baseline_pseudobulks_df, disease_pseudobulks_df):
